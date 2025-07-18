@@ -2,43 +2,46 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load model
+# Load the trained model and encoder
 model = joblib.load("best_model.pkl")
+encoder = joblib.load("encoder.pkl")  # Encoder used during training (e.g., OneHotEncoder or ColumnTransformer)
 
-st.set_page_config(page_title="Employee Salary Predictor", layout="centered")
-st.title("💼 Employee Salary Classifier")
-st.markdown("Predict whether an employee earns >50K or <=50K based on their profile.")
+# Streamlit App Config
+st.set_page_config(page_title="💼 Salary Classifier", page_icon="💰", layout="centered")
+st.title("💼 Employee Salary Predictor")
+st.write("Fill in the employee details to predict whether the salary is <=50K or >50K.")
 
-# Sidebar inputs
-st.sidebar.header("Enter Employee Details")
+# Input Fields
+age = st.slider("Age", 18, 65, 30)
+gender = st.selectbox("Gender", ["Male", "Female"])
+education = st.selectbox("Education", [
+    "Bachelors", "Masters", "PhD", "HS-grad", "Assoc"])
+experience = st.slider("Years of Experience", 0, 40, 5)
+job_title = st.selectbox("Job Title", [
+    "Engineer", "Data Scientist", "Manager", "Sales Executive", "Developer", "HR"])
+location = st.selectbox("Location", [
+    "India", "California", "Texas", "Florida", "New York"])
 
-education = st.sidebar.selectbox("Education Level", [
-    "Bachelors", "Masters", "PhD", "HS-grad", "Assoc"
-])
-experience = st.sidebar.slider("Years of Experience", 0, 40, 5)
-location = st.sidebar.selectbox("Location", [
-    "India", "California", "Texas", "Florida"
-])
-job_title = st.sidebar.selectbox("Job Title", [
-    "Software Engineer", "Manager", "Analyst", "Developer", "Technician"
-])
-age = st.sidebar.slider("Age", 18, 65, 30)
-gender = st.sidebar.radio("Gender", ["Male", "Female"])
-
-# Prepare input
+# Build Input DataFrame
 input_data = pd.DataFrame({
+    'age': [age],
+    'gender': [gender],
     'education': [education],
     'experience': [experience],
-    'location': [location],
     'job_title': [job_title],
-    'age': [age],
-    'gender': [gender]
+    'location': [location]
 })
 
-st.subheader("🔍 Input Summary")
-st.write(input_data)
+# Show user input
+st.subheader("Input Summary")
+st.table(input_data)
 
 # Predict
-if st.button("Predict Salary Class"):
-    prediction = model.predict(input_data)[0]
-    st.success(f"🧠 Predicted Salary Class: {prediction}")
+if st.button("🔍 Predict Salary Class"):
+    try:
+        input_encoded = encoder.transform(input_data)
+        prediction = model.predict(input_encoded)[0]
+        label = ">50K" if prediction == 1 else "<=50K"
+        st.success(f"✅ Predicted Salary Class: {label}")
+    except Exception as e:
+        st.error(f"⚠️ Prediction Failed: {e}")
