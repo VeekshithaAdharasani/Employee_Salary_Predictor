@@ -2,66 +2,66 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load trained model
+# Load model
 model = joblib.load("best_model.pkl")
 
-st.set_page_config(page_title="Salary Prediction", page_icon="💼", layout="centered")
-st.title("💼 Employee Salary Predictor")
-st.markdown("This app predicts whether an employee earns **>50K** or **≤50K** based on their profile.")
+st.set_page_config(page_title="Salary Prediction App", layout="centered")
+st.title("💼 Employee Salary Prediction")
+st.markdown("Predict whether an employee earns **>50K** or **≤50K**")
 
-# --- User Input ---
-st.header("📋 Enter Employee Details")
+# Input form
+with st.form("prediction_form"):
+    st.subheader("Enter Employee Details")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    age = st.slider("Age", 18, 65, 30)
-    education = st.selectbox("Education Level", [
-        "Bachelors", "Masters", "PhD", "HS-grad", "Assoc", "Some-college"
-    ])
-    experience = st.slider("Years of Experience", 0, 40, 5)
+    with col1:
+        age = st.number_input("Age", min_value=18, max_value=65, value=30)
+        education = st.selectbox("Education", ["Bachelors", "Masters", "PhD", "HS-grad", "Assoc", "Some-college"])
+        experience = st.slider("Years of Experience", 0, 40, 5)
 
-with col2:
-    occupation = st.selectbox("Job Role", [
-        "Tech-support", "Craft-repair", "Other-service", "Sales",
-        "Exec-managerial", "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct",
-        "Adm-clerical", "Farming-fishing", "Transport-moving", "Priv-house-serv",
-        "Protective-serv", "Armed-Forces"
-    ])
-    hours = st.slider("Hours per week", 1, 80, 40)
+    with col2:
+        occupation = st.selectbox("Occupation", [
+            "Tech-support", "Craft-repair", "Other-service", "Sales",
+            "Exec-managerial", "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct",
+            "Adm-clerical", "Farming-fishing", "Transport-moving", "Priv-house-serv",
+            "Protective-serv", "Armed-Forces"
+        ])
+        hours = st.slider("Hours per Week", 1, 80, 40)
 
-# --- Format Input for Model ---
-input_df = pd.DataFrame({
-    'age': [age],
-    'education': [education],
-    'occupation': [occupation],
-    'hours-per-week': [hours],
-    'experience': [experience]
-})
+    submitted = st.form_submit_button("Predict")
 
-# --- Prediction ---
-if st.button("🔍 Predict Salary Class"):
-    try:
-        prediction = model.predict(input_df)[0]
-        st.success(f"Predicted Salary Class: **{prediction}**")
-    except Exception as e:
-        st.error(f"⚠️ Error: {str(e)}")
+    if submitted:
+        input_df = pd.DataFrame({
+            "age": [age],
+            "education": [education],
+            "occupation": [occupation],
+            "hours-per-week": [hours],
+            "experience": [experience]
+        })
 
-# --- Batch Prediction ---
+        try:
+            prediction = model.predict(input_df)[0]
+            st.success(f"Prediction: **{prediction}**")
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+# Batch prediction
 st.markdown("---")
-st.subheader("📁 Batch Prediction (CSV Upload)")
-batch_file = st.file_uploader("Upload CSV", type="csv")
+st.subheader("📁 Batch Prediction")
+csv_file = st.file_uploader("Upload CSV", type=["csv"])
 
-if batch_file:
+if csv_file is not None:
     try:
-        data = pd.read_csv(batch_file)
-        st.write("Data Preview:", data.head())
-        results = model.predict(data)
-        data['Prediction'] = results
-        st.write("✅ Results:")
-        st.write(data.head())
+        df = pd.read_csv(csv_file)
+        st.write("📄 Uploaded Preview:", df.head())
 
-        csv = data.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Results", csv, file_name="predictions.csv", mime="text/csv")
+        preds = model.predict(df)
+        df['Prediction'] = preds
+        st.write("✅ Predictions:")
+        st.write(df.head())
+
+        download = df.to_csv(index=False).encode('utf-8')
+        st.download_button("Download Results", download, file_name="salary_predictions.csv", mime="text/csv")
     except Exception as e:
-        st.error(f"⚠️ Error processing file: {str(e)}")
+        st.error(f"Error: {e}")
