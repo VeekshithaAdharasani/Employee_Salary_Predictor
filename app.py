@@ -1,39 +1,43 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import joblib
 
-# Load the trained model
+# Load model
 model = joblib.load("best_model.pkl")
 
-st.set_page_config(page_title="Salary Predictor", page_icon="💰", layout="centered")
-
+# Title
+st.set_page_config(page_title="Employee Salary Predictor", layout="centered")
 st.title("💼 Employee Salary Predictor")
-st.markdown("Enter employee details below to predict whether the salary is >50K or ≤50K.")
 
-# Collect user input
-age = st.number_input("Age", min_value=18, max_value=70, value=30)
-education = st.selectbox("Education", ["High School", "Bachelors", "Masters", "PhD"])
+# Input Fields
+st.subheader("Enter Employee Details")
+
+age = st.slider("Age", 18, 65, 30)
+experience = st.slider("Years of Experience", 0, 50, 5)
+education = st.selectbox("Education Level", ["Bachelors", "Masters", "PhD", "HS-grad", "Some-college"])
+job_title = st.selectbox("Job Title", ["Software Engineer", "Manager", "Data Scientist", "Analyst"])
+location = st.selectbox("Location", ["New York", "San Francisco", "Austin", "Remote"])
 gender = st.selectbox("Gender", ["Male", "Female"])
-job_title = st.selectbox("Job Title", ["Software Engineer", "Manager", "Sales Executive", "Technician", "Developer"])
-location = st.selectbox("Location", ["India", "California", "Texas", "Florida", "New York"])
-experience = st.slider("Years of Experience", 0, 40, 5)
 
-# Prepare input dataframe (column names must match training)
-input_df = pd.DataFrame({
-    'age': [age],
-    'education': [education],
-    'gender': [gender],
-    'job_title': [job_title],
-    'location': [location],
-    'experience': [experience]
-})
+# Manual Encoding (must match training)
+education_dict = {"HS-grad": 0, "Some-college": 1, "Bachelors": 2, "Masters": 3, "PhD": 4}
+job_dict = {"Software Engineer": 0, "Manager": 1, "Data Scientist": 2, "Analyst": 3}
+location_dict = {"New York": 0, "San Francisco": 1, "Austin": 2, "Remote": 3}
+gender_dict = {"Male": 0, "Female": 1}
 
-# Display input
-st.subheader("📄 Input Summary")
-st.write(input_df)
+# Convert input to DataFrame
+input_data = pd.DataFrame([[
+    age,
+    experience,
+    education_dict[education],
+    job_dict[job_title],
+    location_dict[location],
+    gender_dict[gender]
+]], columns=["age", "experience", "education", "job_title", "location", "gender"])
 
 # Prediction
-if st.button("🔍 Predict Salary Class"):
-    prediction = model.predict(input_df)[0]
-    label = ">50K" if prediction == 1 else "≤50K"
-    st.success(f"🎯 Predicted Salary Class: **{label}**")
+if st.button("Predict Salary Class"):
+    prediction = model.predict(input_data)[0]
+    result = ">50K" if prediction == 1 else "≤50K"
+    st.success(f"✅ Predicted Salary Class: {result}")
