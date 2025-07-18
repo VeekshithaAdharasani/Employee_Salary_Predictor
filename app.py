@@ -4,7 +4,6 @@ import joblib
 
 # Load model and encoder
 model = joblib.load("best_model.pkl")
-encoder = joblib.load("encoder.pkl")  # Must be the same encoder used during training
 
 st.set_page_config(page_title="Salary Classifier", layout="centered")
 st.title("💼 Salary Predictor App")
