@@ -119,17 +119,17 @@ def main():
                     input_df = pd.DataFrame({
                         "age": [age],
                         "workclass": ["Private"],
-                        "fnlwgt": [200000],
+                        "fnlwgt": [200000], 
                         "education": [education_level],
-                        "educational-num": [10],
+                        "educational-num": [12],
                         "marital-status": ["Never-married"],
                         "occupation": [job_title],
-                        "relationship": ["Not-in-family"],   
-                        "race": ["White"],   
-                        "gender": [gender],    
-                        "capital-gain": [0],    
-                        "capital-loss": [0],   
-                        "hours-per-week": [40],    
+                        "relationship": ["Not-in-family"],
+                        "race": ["White"],
+                        "gender": [gender],
+                        "capital-gain": [0],
+                        "capital-loss": [0],
+                        "hours-per-week": [40],
                         "native-country": ["United-States"]
                     })
 
