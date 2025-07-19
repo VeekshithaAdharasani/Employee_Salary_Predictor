@@ -116,22 +116,21 @@ def main():
                         "Master": 14,
                         "PhD": 16
                     }
-
                     input_df = pd.DataFrame({
-                        'age': [age],
-                        'workclass': ["Private"],
-                        'fnlwgt': [200000],
-                        'education': [education_level],
-                        'educational-num': [education_map.get(education_level, 10)],
-                        'marital-status': ["Never-married"],
-                        'occupation': [job_title],
-                        'relationship': ["Not-in-family"],
-                        'race': ["White"],
-                        'gender': [gender],
-                        'capital-gain': [0],
-                        'capital-loss': [0],
-                        'hours-per-week': [40],
-                        'native-country': ["United-States"]
+                        "age": [age],
+                        "workclass": ["Private"],
+                        "fnlwgt": [200000],
+                        "education": [education_level],
+                        "educational-num": [10],
+                        "marital-status": ["Never-married"],
+                        "occupation": [job_title],
+                        "relationship": ["Not-in-family"],   
+                        "race": ["White"],   
+                        "gender": [gender],    
+                        "capital-gain": [0],    
+                        "capital-loss": [0],   
+                        "hours-per-week": [40],    
+                        "native-country": ["United-States"]
                     })
 
                     prediction = model.predict(input_df)[0]
