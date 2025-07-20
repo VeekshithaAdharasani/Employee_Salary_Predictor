@@ -86,7 +86,7 @@ def main():
         native_country = st.selectbox("Country", ["United-States", "Mexico", "Philippines", "Germany", "Canada", "India", "Cuba", "England", "Jamaica", "China", "South", "Italy", "Poland", "Columbia", "Vietnam", "Guatemala","Japan", "Iran", "Honduras", "Portugal", "Ireland", "France", "Greece", "Ecuador", "Taiwan", "Thailand",  "Nicaragua", "Scotland", "Hong", "Trinadad&Tobago", "Laos", "El-Salvador", "Cambodia", "Hungary"])
         
         st.subheader("💼 Professional Details")
-        education_level = st.selectbox("Education Level", ["Bachelors", "HS-grad", "Some-college", "Masters", "Assoc-acdm", "Assoc-voc", "11th", "10th", "7th-8th", "Prof-school", "9th", "12th", "Doctorate", "5th-6th", "1st-4th", "Preschool"])
+        education_level = st.selectbox("Education Level", ["10th", "11th", "12th", "1st-4th", "5th-6th", "7th-8th", "9th", "Assoc-acdm", "Assoc-voc", "Bachelors", "Doctorate", "HS-grad", "Masters", "Preschool", "Prof-school", "Some-college"])
         job_title = st.selectbox("Occupation", ["Exec-managerial", "Craft-repair", "Sales", "Adm-clerical", "Prof-specialty", "Tech-support", "Other-service", "Transport-moving", "Handlers-cleaners", "Farming-fishing", "Machine-op-inspct","Protective-serv", "Priv-house-serv", "Armed-Forces"])
         experience = st.slider("Years of Experience", 0, 50, 5)
 
@@ -114,11 +114,22 @@ def main():
                 time.sleep(1)
 
                 try:
-                    education_map = {
-                        "High School": 9,
-                        "Bachelor": 13,
-                        "Master": 14,
-                        "PhD": 16
+                    education_map = {"Preschool": 1,
+                                     "1st-4th": 2,
+                                     "5th-6th": 3,
+                                     "7th-8th": 4,
+                                     "9th": 5,
+                                     "10th": 6,
+                                     "11th": 7,
+                                     "12th": 8,
+                                     "HS-grad": 9,
+                                     "Some-college": 10,
+                                     "Assoc-acdm": 11,
+                                     "Assoc-voc": 12,
+                                     "Bachelors": 13,
+                                     "Masters": 14,
+                                     "Prof-school": 15,
+                                     "Doctorate": 16
                     }
                     input_df = pd.DataFrame({
                         "age": [age],
