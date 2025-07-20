@@ -137,7 +137,7 @@ def main():
                         "fnlwgt": [200000], 
                         "education": [education_level],
                         "educational-num": [education_map[education_level]],
-                        "marital-status": [marital-status],
+                        "marital-status": [marital_status],
                         "occupation": [job_title],
                         "relationship": [relationship],
                         "race": ["White"],
@@ -145,7 +145,7 @@ def main():
                         "capital-gain": [0],
                         "capital-loss": [0],
                         "hours-per-week": [40],
-                        "native-country": [native-country]
+                        "native-country": [native_country]
                     })
 
                     prediction = model.predict(input_df)[0]
