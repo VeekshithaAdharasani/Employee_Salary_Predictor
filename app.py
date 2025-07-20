@@ -1,94 +1,114 @@
 import streamlit as st
-import joblib
 import pandas as pd
 import numpy as np
-from datetime import datetime
+import joblib
 import time
-import plotly.express as px
+from datetime import datetime
 
-# Page config
-st.set_page_config(
-    page_title="💼 Salary Prediction App",
-    page_icon="💰",
-    layout="wide"
-)
+# Streamlit settings
+st.set_page_config(page_title="💼 Salary Prediction App", layout="wide")
 
-# Load both models
 @st.cache_resource
 def load_models():
-    classifier = joblib.load("xgb_classifier.pkl")
-    regressor = joblib.load("xgb_regressor.pkl")
+    classifier = joblib.load("salary_prediction_pipeline.pkl")      # classification model
+    regressor = joblib.load("salary_regression_pipeline.pkl")       # regression model
     return classifier, regressor
 
 classifier, regressor = load_models()
 
-st.title("💼 AI-Powered Salary Prediction App")
+def validate_inputs(age, experience):
+    if not (18 <= age <= 100):
+        return False, "Age must be between 18 and 100"
+    if experience < 0 or experience > (age - 16):
+        return False, "Experience must be realistic"
+    return True, ""
 
-# Sidebar options
-with st.sidebar:
-    st.header("⚙️ Prediction Settings")
-    mode = st.radio("Select Prediction Mode", ["Classification", "Regression"])
-    currency = st.selectbox("Currency", ["₹ (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
+def get_user_input():
+    st.sidebar.title("⚙️ Settings")
+    mode = st.sidebar.radio("Choose Prediction Mode", ["Classification (<=50K or >50K)", "Regression (Exact Salary)"])
+    currency = st.sidebar.selectbox("Currency", ["₹ (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
 
-# Main input section
-col1, col2 = st.columns(2)
-with col1:
+    st.title("💼 Salary Prediction App")
     age = st.number_input("Age", 18, 100, 30)
     gender = st.selectbox("Gender", ["Male", "Female"])
+    education = st.selectbox("Education", ["10th", "12th", "Bachelors", "Masters", "Doctorate", "HS-grad", "Some-college"])
+    occupation = st.selectbox("Occupation", ["Exec-managerial", "Craft-repair", "Sales", "Adm-clerical", "Prof-specialty", "Tech-support", "Other-service", "Transport-moving", "Handlers-cleaners", "Farming-fishing", "Machine-op-inspct","Protective-serv", "Priv-house-serv", "Armed-Forces"])
+    experience = st.slider("Years of Experience", 0, 50, 5)
     workclass = st.selectbox("Workclass", ["Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov", "Local-gov", "State-gov", "Without-pay"])
-    marital_status = st.selectbox("Marital Status", ["Never-married", "Married-civ-spouse", "Divorced", "Separated", "Widowed", "Married-spouse-absent"])
+    marital_status = st.selectbox("Marital Status", ["Never-married", "Married-civ-spouse", "Divorced", "Separated", "Widowed"])
     relationship = st.selectbox("Relationship", ["Not-in-family", "Husband", "Wife", "Own-child", "Unmarried", "Other-relative"])
-    native_country = st.selectbox("Country", ["United-States", "Mexico", "India", "Philippines", "Canada"])
+    native_country = st.selectbox("Country", ["United-States", "India", "Mexico", "Philippines", "Germany", "Canada", "Cuba", "England"])
 
-with col2:
-    education_level = st.selectbox("Education Level", ["10th", "11th", "12th", "HS-grad", "Some-college", "Bachelors", "Masters", "Doctorate"])
-    occupation = st.selectbox("Occupation", ["Exec-managerial", "Craft-repair", "Sales", "Prof-specialty", "Tech-support", "Other-service"])
-    hours_per_week = st.slider("Hours per Week", 1, 80, 40)
-    capital_gain = st.number_input("Capital Gain", 0, 100000, 0)
-    capital_loss = st.number_input("Capital Loss", 0, 100000, 0)
-    fnlwgt = st.number_input("Fnlwgt", 10000, 1000000, 200000)
+    return {
+        "mode": mode,
+        "currency": currency,
+        "features": {
+            "age": age,
+            "workclass": workclass,
+            "fnlwgt": 200000,
+            "education": education,
+            "educational-num": 12,
+            "marital-status": marital_status,
+            "occupation": occupation,
+            "relationship": relationship,
+            "race": "White",
+            "gender": gender,
+            "capital-gain": 0,
+            "capital-loss": 0,
+            "hours-per-week": 40,
+            "native-country": native_country
+        },
+        "experience": experience
+    }
 
-st.markdown("---")
+def make_prediction(mode, features):
+    input_df = pd.DataFrame([features])
+    if mode.startswith("Classification"):
+        label = classifier.predict(input_df)[0]
+        return ">50K" if label == 1 else "<=50K"
+    else:
+        salary = regressor.predict(input_df)[0]
+        return salary
 
-if st.button("🔮 Predict My Salary"):
-    with st.spinner("Analyzing your profile..."):
-        time.sleep(1)
+def display_result(mode, prediction, currency):
+    symbol = currency.split()[0]
+    st.subheader("🔍 Prediction Result")
 
-        input_df = pd.DataFrame({
-            "age": [age],
-            "workclass": [workclass],
-            "fnlwgt": [fnlwgt],
-            "education": [education_level],
-            "educational-num": [13],
-            "marital-status": [marital_status],
-            "occupation": [occupation],
-            "relationship": [relationship],
-            "race": ["White"],
-            "gender": [gender],
-            "capital-gain": [capital_gain],
-            "capital-loss": [capital_loss],
-            "hours-per-week": [hours_per_week],
-            "native-country": [native_country]
-        })
+    if mode.startswith("Classification"):
+        st.success(f"Predicted Income Category: **{prediction}**")
+    else:
+        converted_salary = prediction * {
+            "₹ (INR)": 1,
+            "$ (USD)": 0.012,
+            "€ (EUR)": 0.011,
+            "£ (GBP)": 0.0095
+        }[currency]
 
-        symbol = currency.split()[0]
-        currency_multipliers = {"₹ (INR)": 1, "$ (USD)": 0.012, "€ (EUR)": 0.011, "£ (GBP)": 0.0095}
+        st.markdown(f"""
+        <div style='background:linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding:20px; border-radius:15px; text-align:center;'>
+            <p style='font-size:1.2rem; color:white;'>💰 Predicted Annual Salary</p>
+            <div style='font-size:2.5rem; font-weight:700; color:white;'>{symbol} {converted_salary:,.2f}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        try:
-            if mode == "Classification":
-                prediction = classifier.predict(input_df)[0]
-                income_class = ">50K" if prediction == 1 else "<=50K"
-                st.success(f"🏷️ Predicted Income Class: {income_class}")
-            else:
-                salary = regressor.predict(input_df)[0]
-                converted_salary = salary * currency_multipliers[currency]
-                st.markdown(f"""
-                <div style='background:#38ef7d;padding:20px;border-radius:10px;'>
-                    <h3 style='color:white;'>Predicted Salary: {symbol} {converted_salary:,.2f}</h3>
-                </div>
-                """, unsafe_allow_html=True)
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Monthly Salary", f"{symbol} {converted_salary / 12:,.2f}")
+        col2.metric("Hourly Rate", f"{symbol} {converted_salary / (40 * 52):.2f}")
+        col3.metric("Daily Earning", f"{symbol} {converted_salary / 365:.2f}")
 
-        except Exception as e:
-            st.error(f"❌ Prediction failed: {str(e)}")
-            st.info("💡 Please check your input data and try again.")
+def main():
+    user_input = get_user_input()
+    valid, error_msg = validate_inputs(user_input["features"]["age"], user_input["experience"])
 
+    if not valid:
+        st.error(error_msg)
+        return
+
+    if st.button("🔮 Predict"):
+        with st.spinner("Analyzing your profile..."):
+            time.sleep(1)
+            result = make_prediction(user_input["mode"], user_input["features"])
+            display_result(user_input["mode"], result, user_input["currency"])
+
+if __name__ == "__main__":
+    main()
