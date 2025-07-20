@@ -184,6 +184,7 @@ def main():
                     }
 
                     symbol = currency.split()[0]
+                    label = model.predict(input_df)[0]
                     income_class = ">50K" if prediction == 1 else "<=50K"
 
                     st.markdown(f"""
