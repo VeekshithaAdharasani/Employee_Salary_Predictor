@@ -157,7 +157,7 @@ def main():
                     }
 
                     symbol = currency.split()[0]
-                    converted_salary = prediction * currency_multipliers[currency]
+                    income_class = ">50K" if prediction == 1 else "<=50K"
 
                     st.markdown(f"""
                     <div style='background:linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding:20px; border-radius:15px; text-align:center;'>
