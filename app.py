@@ -80,10 +80,14 @@ def main():
         st.subheader("👤 Personal Information")
         age = st.number_input("Age", 18, 100, 30)
         gender = st.selectbox("Gender", ["Male", "Female"])
-
+        workclass = st.selectbox("Workclass", ["Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov", "Local-gov", "State-gov", "Without-pay"])
+        marital_status = st.selectbox("Marital Status", ["Never-married", "Married-civ-spouse", "Divorced", "Separated", "Widowed", "Married-spouse-absent"])
+        relationship = st.selectbox("Relationship", ["Not-in-family", "Husband", "Wife", "Own-child", "Unmarried", "Other-relative"])
+        native_country = st.selectbox("Country", ["United-States", "Mexico", "Philippines", "Germany", "Canada", "India", "Cuba", "England", "Jamaica", "China", "South", "Italy", "Poland", "Columbia", "Vietnam", "Guatemala","Japan", "Iran", "Honduras", "Portugal", "Ireland", "France", "Greece", "Ecuador", "Taiwan", "Thailand",  "Nicaragua", "Scotland", "Hong", "Trinadad&Tobago", "Laos", "El-Salvador", "Cambodia", "Hungary"])
+        
         st.subheader("💼 Professional Details")
-        education_level = st.selectbox("Education Level", ["High School", "Bachelor", "Master", "PhD"])
-        job_title = st.selectbox("Job Title", ["Developer", "Data Scientist", "Manager", "Analyst", "Engineer"])
+        education_level = st.selectbox("Education Level", ["Bachelors", "HS-grad", "Some-college", "Masters", "Assoc-acdm", "Assoc-voc", "11th", "10th", "7th-8th", "Prof-school", "9th", "12th", "Doctorate", "5th-6th", "1st-4th", "Preschool"])
+        job_title = st.selectbox("Occupation", ["Exec-managerial", "Craft-repair", "Sales", "Adm-clerical", "Prof-specialty", "Tech-support", "Other-service", "Transport-moving", "Handlers-cleaners", "Farming-fishing", "Machine-op-inspct","Protective-serv", "Priv-house-serv", "Armed-Forces"])
         experience = st.slider("Years of Experience", 0, 50, 5)
 
     with col2:
@@ -118,19 +122,19 @@ def main():
                     }
                     input_df = pd.DataFrame({
                         "age": [age],
-                        "workclass": ["Private"],
+                        "workclass": [workclass],
                         "fnlwgt": [200000], 
                         "education": [education_level],
-                        "educational-num": [12],
-                        "marital-status": ["Never-married"],
+                        "educational-num": [education_map[education_level]],
+                        "marital-status": [marital-status],
                         "occupation": [job_title],
-                        "relationship": ["Not-in-family"],
+                        "relationship": [relationship],
                         "race": ["White"],
                         "gender": [gender],
                         "capital-gain": [0],
                         "capital-loss": [0],
                         "hours-per-week": [40],
-                        "native-country": ["United-States"]
+                        "native-country": [native-country]
                     })
 
                     prediction = model.predict(input_df)[0]
