@@ -28,6 +28,33 @@ def load_model():
         st.error(f"❌ Error loading model: {str(e)}")
         st.stop()
 
+@st.cache_data
+def compute_avg_salary_by_occupation(model):
+    import pandas as pd
+
+    # Load your original dataset (make sure it's available in your Colab/files)
+    df = pd.read_csv("adult 3.csv")
+    df.columns = df.columns.str.strip()
+    df.replace("?", pd.NA, inplace=True)
+    df.dropna(inplace=True)
+
+    # Drop target column to prepare for prediction
+    occupations = df["occupation"].unique()
+    avg_salaries = {}
+
+    for occ in occupations:
+        subset = df[df["occupation"] == occ].copy()
+        if len(subset) >= 5:
+            X_subset = subset.drop(columns=["income"])
+            try:
+                preds = model.predict(X_subset)
+                avg_salary = preds.mean()
+                avg_salaries[occ] = avg_salary
+            except:
+                continue
+
+    return avg_salaries
+
 # Data validation functions
 def validate_age(age):
     if age < 18 or age > 100:
@@ -166,23 +193,11 @@ def main():
                     </div>
                     """, unsafe_allow_html=True)
 
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                        st.metric("Monthly Salary", f"{symbol} {converted_salary / 12:,.2f}")
-                    with col2:
-                        st.metric("Hourly Rate", f"{symbol} {converted_salary / (40 * 52):.2f}")
-                    with col3:
-                        st.metric("Daily Earning", f"{symbol} {converted_salary / 365:.2f}")
+                    st.metric("Income Category", income_class)
 
                     if show_charts:
                         st.subheader("📊 Salary Breakdown")
-                        job_avg_salaries = {
-                            "Developer": 800000,
-                            "Data Scientist": 1200000,
-                            "Manager": 1500000,
-                            "Analyst": 700000,
-                            "Engineer": 900000
-                        }
+                        job_avg_salaries = compute_avg_salary_by_occupation(model)
 
                         chart_data = pd.DataFrame({
                             "Role": list(job_avg_salaries.keys()),
