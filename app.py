@@ -139,9 +139,6 @@ if st.button("🔍 Predict Salary"):
             with col3:
                 st.metric("Daily Earning", f"₹ {daily_earning:,.2f}")
 
-            st.markdown("""
-            <hr style="border-top: 2px dashed #aaa; margin: 20px 0;" />
-            """, unsafe_allow_html=True)
 
             # Salary Bar Chart
             fig = go.Figure(go.Bar(
@@ -158,6 +155,11 @@ if st.button("🔍 Predict Salary"):
                 height=400
             )
             st.plotly_chart(fig, use_container_width=True)
+
+                        st.markdown("""
+            <hr style="border-top: 2px dashed #aaa; margin: 10px 0;" />
+            """, unsafe_allow_html=True)
+            
             # Scatter Plot: Actual vs Predicted
             try:
                 sample_df = pd.read_csv("sample_predictions.csv")
