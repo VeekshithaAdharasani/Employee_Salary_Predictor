@@ -157,7 +157,7 @@ if st.button("🔍 Predict Salary"):
             st.plotly_chart(fig, use_container_width=True)
 
             st.markdown("""
-            <hr style="border-top: 1px dashed #aaa; margin: 5px 0;" />
+            <hr style="border-top: 1px dashed #aaa; margin: 8px 0;" />
             """, unsafe_allow_html=True)
             
             # Scatter Plot: Actual vs Predicted
@@ -177,6 +177,10 @@ if st.button("🔍 Predict Salary"):
                 st.warning("⚠️ Could not display prediction graph.")
                 st.text(f"Error: {e}")
 
+            st.markdown("""
+            <hr style="border-top: 1px dashed #aaa; margin: 8px 0;" />
+            """, unsafe_allow_html=True)
+
             # Model Evaluation Summary
             st.subheader("📊 Model Evaluation Summary")
             try:
@@ -187,6 +191,11 @@ if st.button("🔍 Predict Salary"):
             except Exception as eval_error:
                 st.warning("⚠️ Could not load model evaluation data.")
                 st.text(f"Error: {eval_error}")
+
+            st.markdown("""
+            <hr style="border-top: 1px dashed #aaa; margin: 8px 0;" />
+            """, unsafe_allow_html=True)
+            
             # Sample Predictions and Errors
             st.subheader("🔍 Sample Predictions and Errors")
             try:
