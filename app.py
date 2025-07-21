@@ -84,23 +84,22 @@ if st.button("Predict Salary 💰"):
                 st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
         except Exception as e:
             st.error(f"❌ Prediction failed: {e}")
-            
-        # Visualization
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=prediction,
-            title={'text': "Estimated Salary (INR)"},
-            gauge={
-                'axis': {'range': [None, 5000000]},
-                'bar': {'color': "#4caf50"},
-                'steps': [
-                    {'range': [0, 500000], 'color': "#f9f9f9"},
-                    {'range': [500000, 2000000], 'color': "#cde9d6"},
-                    {'range': [2000000, 5000000], 'color': "#a5d6a7"}
-                ],
-            }
-        ))
-        st.plotly_chart(fig)
-
-    except Exception as e:
-        st.error(f"❌ Prediction failed: {e}")
+            #Visualization
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=prediction,
+                title={'text': "Estimated Salary (INR)"},
+                gauge={
+                    'axis': {'range': [None, 5000000]},
+                    'bar': {'color': "#4caf50"},
+                    'steps': [
+                        {'range': [0, 500000], 'color': "#f9f9f9"},
+                        {'range': [500000, 2000000], 'color': "#cde9d6"},
+                        {'range': [2000000, 5000000], 'color': "#a5d6a7"}
+                    ],
+                }
+            ))
+            st.plotly_chart(fig)
+        
+        except Exception as e:
+            st.error(f"❌ Prediction failed: {e}")
