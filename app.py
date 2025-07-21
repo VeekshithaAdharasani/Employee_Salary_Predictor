@@ -58,8 +58,7 @@ model, mse= joblib.load("best_salary_model.pkl")
 
 # Sidebar: show model performance
 st.sidebar.header("📈 Model Performance")
-st.sidebar.metric("MSE (Mean Squared Error)", f"{mse:,.2f}")
-st.sidebar.metric("R² Score", f"{r2:.4f}")
+st.sidebar.metric("MSE (Mean Squared Error)", f"{float(mse):,.2f}")
 
 # Page config
 st.set_page_config(page_title="Salary Predictor 💼", layout="centered")
