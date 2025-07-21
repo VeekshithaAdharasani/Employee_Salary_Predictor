@@ -126,6 +126,9 @@ if st.button("🔍 Predict Salary"):
                 unsafe_allow_html=True
             )
             st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
+
+            st.write("🔸 Inside the full-width box!")
+
             # Additional metrics
             annual_salary = prediction * 12
             hourly_rate = prediction / (40 * 4.33) 
