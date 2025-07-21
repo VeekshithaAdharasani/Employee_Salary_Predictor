@@ -54,13 +54,14 @@ st.markdown(
 # Load trained pipeline
 model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
-model, mse= joblib.load("best_salary_model.pkl") 
+model, mse, r2= joblib.load("best_salary_model.pkl") 
 
 mse = float(mse)
+r2 = float(r2)
 # Sidebar: show model performance
 st.sidebar.header("📈 Model Performance")
 st.sidebar.metric("MSE (Mean Squared Error)", f"{mse:,.2f}")
-
+st.sidebar.metric("R² Score", f"{r2:.4f}")
 # Page config
 st.set_page_config(page_title="Salary Predictor 💼", layout="centered")
 st.markdown("<h1 style='text-align: center; color: #3366cc;'>AI-Powered Salary Predictor</h1>", unsafe_allow_html=True)
