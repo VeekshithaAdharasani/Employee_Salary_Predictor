@@ -15,22 +15,6 @@ class _RemainderColsList(list):
 # Inject it into sklearn where joblib is looking for it
 sklearn.compose._column_transformer._RemainderColsList = _RemainderColsList
 
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: #0E1117;
-        color: #FAFAFA;
-    }
-    .stApp {
-        background-color: #0E1117;
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 # Page configuration
 st.set_page_config(
     page_title="💼 Employee Salary Prediction App",
