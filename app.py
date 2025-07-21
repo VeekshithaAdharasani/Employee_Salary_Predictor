@@ -50,7 +50,7 @@ if st.button("Predict Salary 💰"):
         st.success(f"✅ Estimated Monthly Salary: {'₹'} {prediction:,.2f}")
 
         # Additional metrics
-         annual_salary = prediction * 12
+        annual_salary = prediction * 12
         hourly_rate = prediction / (40 * 4.33) 
         daily_earning = prediction / 30
 
