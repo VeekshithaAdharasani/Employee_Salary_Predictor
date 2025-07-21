@@ -27,7 +27,7 @@ with st.sidebar:
 
 # Input fields
 education = st.selectbox("🎓 Education", ["High School", "Bachelor", "Master", "PhD", "Diploma"])
-age = st.selectbox("📅 Age", 18, 65, 25)
+age = st.slider("📅 Age", 18, 65, 25)
 location = st.selectbox("📍 Location", ["Urban", "Rural", "Suburban"])
 gender= st.selectbox("👤 Gender", ["Male", "Female"])
 job_title = st.selectbox("💻 Job_Title", ["Manager", "Director", "Analyst", "Engineer", "Accountant", "Other"])
