@@ -127,7 +127,7 @@ if st.button("🔍 Predict Salary"):
             )
             st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
             # START BOX
-            st.markdown("""<div style='...'>""", unsafe_allow_html=True)
+            st.markdown("""<div style='border: 2px solid #4CAF50; padding: 25px; border-radius: 10px; background-color: #f8fff5; margin-bottom: 30px;'>""", unsafe_allow_html=True)
 
             # VISUALIZATION
             st.markdown("""
