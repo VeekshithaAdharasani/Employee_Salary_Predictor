@@ -78,27 +78,30 @@ if st.button("🔍 Predict Salary"):
     else:
         try:
             input_df = pd.DataFrame({
-            "Education": [education],
-            "Age": [age],
-            "Location": [location],
-            "Gender": [gender],
-            "Job_Title": [job_title],
-            "Experience": [experience],
-        })
-        # Predict salary
-        prediction = model.predict(input_df)[0]
-        MIN_SALARY = 33510.51
-        MAX_SALARY = 193016.60
-        prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
-        st.markdown(
-            f"""
-            <div style='text-align: center; margin-top: 30px; margin-bottom: 30px;'>
-            <h1 style='font-size: 48px; color: green;'>✅ ₹ {prediction:,.2f}</h1>
-            <h4 style='margin-top: -10px;'>Estimated Monthly Salary</h4>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+                "Education": [education],
+                "Age": [age],
+                "Location": [location],
+                "Gender": [gender],
+                "Job_Title": [job_title],
+                "Experience": [experience],
+            })
+            # Predict salary
+            prediction = model.predict(input_df)[0]
+            MIN_SALARY = 33510.51
+            MAX_SALARY = 193016.60
+            prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
+            
+            st.markdown(
+                f"""
+                <div style='text-align: center; margin-top: 30px; margin-bottom: 30px;'>
+                <h1 style='font-size: 48px; color: green;'>✅ ₹ {prediction:,.2f}</h1>
+                <h4 style='margin-top: -10px;'>Estimated Monthly Salary</h4>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        except Exception as e:
+            st.error(f"❌ Prediction failed: {e}")
         
         # Additional metrics
         annual_salary = prediction * 12
