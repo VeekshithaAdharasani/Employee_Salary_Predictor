@@ -46,7 +46,13 @@ if st.button("Predict Salary 💰"):
 
     try:
         prediction = model.predict(input_df)[0]
-        # Additional Metrices
+        # Predict salary
+        prediction = model.predict(input_df)[0]
+
+        MIN_SALARY = 33510.51
+        MAX_SALARY = 193016.60
+        prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
+
         st.success(f"✅ Estimated Monthly Salary: {'₹'} {prediction:,.2f}")
 
         # Additional metrics
