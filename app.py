@@ -40,7 +40,7 @@ if st.button("Predict Salary 💰"):
         "Age": [age],
         "Location": [location],
         "Gender": [gender],
-        "Job_Title": [job_title]
+        "Job_Title": [job_title],
         "Experience": [experience],
     })
 
