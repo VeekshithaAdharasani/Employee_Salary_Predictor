@@ -125,45 +125,44 @@ if st.button("🔍 Predict Salary"):
                 """,
                 unsafe_allow_html=True
             )
-            
-            st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
-            with st.container():
-                # Simulated box using HTML and Streamlit elements
-                st.markdown(
-                    """
-                    <div style='
-                    border: 2px solid #4CAF50; 
-                    padding: 25px; 
-                    border-radius: 12px; 
-                    background-color: #f4fff7;
-                    margin-top: 20px;
-                    '>
-                    """, unsafe_allow_html=True
-                )
-            st.write("🔸 Inside the full-width box!")
-            st.markdown("</div>", unsafe_allow_html=True) 
-
-            # Additional metrics
-            annual_salary = prediction * 12
-            hourly_rate = prediction / (40 * 4.33) 
-            daily_earning = prediction / 30
+            # Section Header Box
+            st.markdown("""
+            <div style="background-color: #e7f5ff; padding: 20px; border-radius: 10px; border: 2px solid #007acc;">
+            <h3 style="color: #007acc;">📊 Salary Forecast Summary</h3>
+            </div>
+            """, unsafe_allow_html=True)
+            # Spacer
+            st.markdown("<br>", unsafe_allow_html=True)
+            # Metrics Section Box
+            st.markdown("""
+            <div style="background-color: #f8fff5; padding: 20px; border-radius: 10px; border: 2px solid #4CAF50;">
+            """, unsafe_allow_html=True)
+            # Metrics Displayed in Columns
             col1, col2, col3 = st.columns(3)
-            
+            annual_salary = prediction * 12
+            hourly_rate = prediction / (40 * 4.33)
+            daily_earning = prediction / 30
             with col1:
-                st.metric("Annual Salary", f"{'₹'} {annual_salary:,.2f}")
+                st.metric("Annual Salary", f"₹ {annual_salary:,.2f}")
             with col2:
-                st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
+                st.metric("Hourly Rate", f"₹ {hourly_rate:,.2f}")
             with col3:
-                st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
-                
+                st.metric("Daily Earning", f"₹ {daily_earning:,.2f}")
+
+            # Close box
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            # Spacer
+            st.markdown("<br>", unsafe_allow_html=True)
 
             # Salary Bar Chart
             fig = go.Figure(go.Bar(
-            x=["Predicted Monthly Salary"],
-            y=[prediction],
-            text=[f"₹ {prediction:,.2f}"],
-            textposition='auto',
-            marker_color='green'
+                
+                x=["Predicted Monthly Salary"],
+                y=[prediction],
+                text=[f"₹ {prediction:,.2f}"],
+                textposition='auto',
+                marker_color='green'
             ))
             fig.update_layout(
                 title="💰 Predicted Monthly Salary",
@@ -187,6 +186,7 @@ if st.button("🔍 Predict Salary"):
             except Exception as e:
                 st.warning("⚠️ Could not display prediction graph.")
                 st.text(f"Error: {e}")
+
             # Model Evaluation Summary
             st.subheader("📊 Model Evaluation Summary")
             try:
