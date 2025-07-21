@@ -5,6 +5,22 @@ import joblib
 import plotly.graph_objects as go
 from PIL import Image
 
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #0E1117;
+        color: #FAFAFA;
+    }
+    .stApp {
+        background-color: #0E1117;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Page configuration
 st.set_page_config(
     page_title="💼 Employee Salary Prediction App",
@@ -16,9 +32,8 @@ st.set_page_config(
 st.markdown(
     """
     <div style='text-align: center; padding: 20px; border: 2px solid #eee; border-radius: 10px; background-color: #f9f9f9;'>
-        <h1 style='color: #4CAF50;'>🏢 Company Logo</h1>
         <h2>🎓 Internship Project</h2>
-        <p style='font-size: 18px;'>
+        <p style='font-size: 10px;'>
             <strong>Company:</strong> Edunet Foundation in collaboration with AICTE and IBM<br>
             <strong>Intern:</strong> Veekshitha Adharasani <br>
             <strong>Project:</strong> Machine Learning Salary Predictor<br>
@@ -33,7 +48,7 @@ st.markdown(
 # Load trained pipeline
 model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
-model, mse, r2 = joblib.load("best_model.pkl") 
+model, mse, r2 = joblib.load("best_salary_model.pkl") 
 
 # Sidebar: show model performance
 st.sidebar.header("📈 Model Performance")
