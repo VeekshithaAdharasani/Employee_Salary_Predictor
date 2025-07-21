@@ -28,15 +28,22 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
 st.markdown(
     """
-    <div style='text-align: center; padding: 20px; border: 2px solid #eee; border-radius: 10px; background-color: #f9f9f9;'>
-        <h2>🎓 Internship Project</h2>
-        <p style='font-size: 10px;'>
+    <div style='
+        text-align: center;
+        padding: 20px;
+        border: 2px solid #555;
+        border-radius: 12px;
+        background-color: #f0f0f0;
+        color: #1e1e1e;
+        font-family: Arial, sans-serif;
+    '>
+        <h2 style='margin-bottom: 10px;'>🎓 Internship Project</h2>
+        <p style='font-size: 16px; line-height: 1.6;'>
             <strong>Company:</strong> Edunet Foundation in collaboration with AICTE and IBM<br>
-            <strong>Intern:</strong> Veekshitha Adharasani <br>
-            <strong>Project:</strong> Machine Learning Salary Predictor<br>
+            <strong>Intern:</strong> Veekshitha Adharasani<br>
+            <strong>Project:</strong> Machine Learning Salary Predictor
         </p>
     </div>
     """,
@@ -44,11 +51,10 @@ st.markdown(
 )
 
 
-
 # Load trained pipeline
 model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
-model, mse, r2 = joblib.load("best_salary_model.pkl") 
+model, mse= joblib.load("best_salary_model.pkl") 
 
 # Sidebar: show model performance
 st.sidebar.header("📈 Model Performance")
