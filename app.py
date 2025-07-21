@@ -156,7 +156,7 @@ if st.button("🔍 Predict Salary"):
             )
             st.plotly_chart(fig, use_container_width=True)
 
-                        st.markdown("""
+            st.markdown("""
             <hr style="border-top: 2px dashed #aaa; margin: 10px 0;" />
             """, unsafe_allow_html=True)
             
