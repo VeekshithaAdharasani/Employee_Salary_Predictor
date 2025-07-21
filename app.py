@@ -139,6 +139,10 @@ if st.button("🔍 Predict Salary"):
             with col3:
                 st.metric("Daily Earning", f"₹ {daily_earning:,.2f}")
 
+            st.markdown("""
+            <hr style="border-top: 2px dashed #aaa; margin: 20px 0;" />
+            """, unsafe_allow_html=True)
+
             # Salary Bar Chart
             fig = go.Figure(go.Bar(
                 
