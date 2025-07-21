@@ -125,9 +125,13 @@ if st.button("🔍 Predict Salary"):
                 """,
                 unsafe_allow_html=True
             )
+            
             st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
-
+            st.markdown("""
+            <div style='border: 2px solid #4CAF50; padding: 25px; border-radius: 10px; background-color: #f8fff5; margin-bottom: 30px;'>
+            """, unsafe_allow_html=True)
             st.write("🔸 Inside the full-width box!")
+            st.markdown("</div>", unsafe_allow_html=True)
 
             # Additional metrics
             annual_salary = prediction * 12
