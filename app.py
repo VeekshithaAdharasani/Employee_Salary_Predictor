@@ -33,54 +33,58 @@ gender= st.selectbox("👤 Gender", ["Male", "Female"])
 job_title = st.selectbox("💻 Job_Title", ["Manager", "Director", "Analyst", "Engineer", "Accountant", "Other"])
 experience = st.slider("💼 Experience (Years)", 0, 40, 2)
 
-if education == "PhD" and experience < 3:
-    st.warning("⚠️ PhD holders typically have at least 3 years of experience.")
-elif education == "Master" and experience < 1:
-    st.warning("⚠️ Master graduates usually have at least 1 year of experience.")
-elif education == "High School" and experience > (age - 16):
-    st.warning("⚠️ High School grads cannot have that much experience at this age.")
-else:
-    st.button("Predict Salary 💰"):
-    input_df = pd.DataFrame({
-        "Education": [education],
-        "Age": [age],
-        "Location": [location],
-        "Gender": [gender],
-        "Job_Title": [job_title],
-        "Experience": [experience],
-    })
-if input_df["Experience"].values[0] > input_df["Age"].values[0]:
-    st.error("❌ Experience cannot be greater than Age. Please correct the input.")
-elif not (education and age and location and gender and job_title and experience is not None):
-    st.warning("⚠️ Please fill in all the input fields before proceeding.")
-else:
-    try:
-        prediction = model.predict(input_df)[0]
-        # Predict salary
-        prediction = model.predict(input_df)[0]
+if st.button("Predict Salary 💰"):
 
-        MIN_SALARY = 33510.51
-        MAX_SALARY = 193016.60
-        prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
-
-        st.success(f"✅ Estimated Monthly Salary: {'₹'} {prediction:,.2f}")
-
-        # Additional metrics
-        annual_salary = prediction * 12
-        hourly_rate = prediction / (40 * 4.33) 
-        daily_earning = prediction / 30
-
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.metric("Annual Salary", f"{'₹'} {annual_salary:,.2f}")
-        with col2:
-            st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
-        with col3:
-            st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
-    except Exception as e:
-        st.error(f"❌ Prediction failed: {e}")
+    # Check if all fields are filled
+    if not (education and location and gender and job_title and experience is not None):
+        st.warning("⚠️ Please fill in all the input fields before proceeding.")
     
+    # Validate age vs experience
+    elif experience > age:
+        st.error("❌ Experience cannot be greater than Age. Please correct the input.")
+
+    # Education vs Experience sanity checks
+    elif education == "PhD" and experience < 3:
+        st.warning("⚠️ PhD holders typically have at least 3 years of experience.")
+    
+    elif education == "Master" and experience < 1:
+        st.warning("⚠️ Master graduates usually have at least 1 year of experience.")
+    
+    elif education == "High School" and experience > (age - 16):
+        st.warning("⚠️ High School grads cannot have that much experience at this age.")
+    
+    else:
+        try:
+            input_df = pd.DataFrame({
+                "Education": [education],
+                "Age": [age],
+                "Location": [location],
+                "Gender": [gender],
+                "Job_Title": [job_title],
+                "Experience": [experience],
+            })
+            
+            # Predict salary
+            prediction = model.predict(input_df)[0]
+            MIN_SALARY = 33510.51
+            MAX_SALARY = 193016.60
+            prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
+            st.success(f"✅ Estimated Monthly Salary: {'₹'} {prediction:,.2f}")
+            # Additional metrics
+            annual_salary = prediction * 12
+            hourly_rate = prediction / (40 * 4.33) 
+            daily_earning = prediction / 30
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Annual Salary", f"{'₹'} {annual_salary:,.2f}")
+            with col2:
+                st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
+            with col3:
+                st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
+        except Exception as e:
+            st.error(f"❌ Prediction failed: {e}")
+            
         # Visualization
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
