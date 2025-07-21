@@ -52,9 +52,9 @@ st.markdown(
 
 
 # Load trained pipeline
-model = joblib.load("salary_prediction_pipeline.pkl")
+pipeline = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
-mse, r2= joblib.load("best_salary_model.pkl") 
+_,mse, r2= joblib.load("best_salary_model.pkl") 
 
 mse = float(mse)
 r2 = float(r2)
