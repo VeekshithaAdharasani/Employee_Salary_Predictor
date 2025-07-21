@@ -171,46 +171,45 @@ if st.button("🔍 Predict Salary"):
                 height=400
             )
             st.plotly_chart(fig, use_container_width=True)
-
-           # Scatter Plot: Actual vs Predicted
-           try:
-               sample_df = pd.read_csv("sample_predictions.csv")
-               fig_scatter = px.scatter(
-                   sample_df,
-                   x="Actual Salary",
-                   y="Predicted Salary (CatBoost)",
-                   title="📈 Actual vs Predicted Salaries (CatBoost)",
-                   labels={"Actual Salary": "Actual", "Predicted Salary (CatBoost)": "Predicted"},
-                   trendline="ols"
-               )
-               fig_scatter.update_layout(height=500)
-               st.plotly_chart(fig_scatter, use_container_width=True)
-           except Exception as e:
-               st.warning("⚠️ Could not display prediction graph.")
-               st.text(f"Error: {e}")
-           # Model Evaluation Summary
-           st.subheader("📊 Model Evaluation Summary")
-           try:
-               eval_df = pd.read_csv("model_evaluation.csv")
-               def highlight_best(row):
-                   return ['background-color: lightgreen'] * len(row) if row["Model"] == "CatBoost" else [''] * len(row)
-               st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
-           except Exception as eval_error:
-               st.warning("⚠️ Could not load model evaluation data.")
-               st.text(f"Error: {eval_error}")
-           # Sample Predictions and Errors
-           st.subheader("🔍 Sample Predictions and Errors")
-           try:
-               sample_df = pd.read_csv("sample_predictions.csv")
-               if "Absolute Error" not in sample_df.columns:
-                   sample_df["Absolute Error"] = abs(sample_df["Actual Salary"] - sample_df["Predicted Salary (CatBoost)"])
-                   st.dataframe(sample_df.head(20), use_container_width=True)
-                   avg_error = sample_df["Absolute Error"].mean()
-                   st.info(f"📉 Average Absolute Error: ₹ {avg_error:,.2f}")
-           except Exception as e:
-               st.warning("⚠️ Could not load sample prediction data.")
-               st.text(f"Error: {e}")
-           st.markdown("</div>", unsafe_allow_html=True)
+            # Scatter Plot: Actual vs Predicted
+            try:
+                sample_df = pd.read_csv("sample_predictions.csv")
+                fig_scatter = px.scatter(
+                    sample_df,
+                    x="Actual Salary",
+                    y="Predicted Salary (CatBoost)",
+                    title="📈 Actual vs Predicted Salaries (CatBoost)",
+                    labels={"Actual Salary": "Actual", "Predicted Salary (CatBoost)": "Predicted"},
+                    trendline="ols"
+                )
+                fig_scatter.update_layout(height=500)
+                st.plotly_chart(fig_scatter, use_container_width=True)
+            except Exception as e:
+                st.warning("⚠️ Could not display prediction graph.")
+                st.text(f"Error: {e}")
+            # Model Evaluation Summary
+            st.subheader("📊 Model Evaluation Summary")
+            try:
+                eval_df = pd.read_csv("model_evaluation.csv")
+                def highlight_best(row):
+                    return ['background-color: lightgreen'] * len(row) if row["Model"] == "CatBoost" else [''] * len(row)
+                st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
+            except Exception as eval_error:
+                st.warning("⚠️ Could not load model evaluation data.")
+                st.text(f"Error: {eval_error}")
+            # Sample Predictions and Errors
+            st.subheader("🔍 Sample Predictions and Errors")
+            try:
+                sample_df = pd.read_csv("sample_predictions.csv")
+                if "Absolute Error" not in sample_df.columns:
+                    sample_df["Absolute Error"] = abs(sample_df["Actual Salary"] - sample_df["Predicted Salary (CatBoost)"])
+                    st.dataframe(sample_df.head(20), use_container_width=True)
+                    avg_error = sample_df["Absolute Error"].mean()
+                    st.info(f"📉 Average Absolute Error: ₹ {avg_error:,.2f}")
+            except Exception as e:
+                st.warning("⚠️ Could not load sample prediction data.")
+                st.text(f"Error: {e}")
+            st.markdown("</div>", unsafe_allow_html=True)
         except Exception as predict_error:
             st.error("Prediction failed.")
             st.text(f"Error: {predict_error}")
