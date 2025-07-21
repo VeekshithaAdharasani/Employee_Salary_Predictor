@@ -126,14 +126,6 @@ if st.button("🔍 Predict Salary"):
                 unsafe_allow_html=True
             )
             st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
-            # START BOX
-            st.markdown("""<div style='border: 2px solid #4CAF50; padding: 25px; border-radius: 10px; background-color: #f8fff5; margin-bottom: 30px;'>""", unsafe_allow_html=True)
-
-            # VISUALIZATION
-            st.markdown("""
-            <div style='border: 2px solid #4CAF50; padding: 20px; border-radius: 10px; background-color: #f8fff5;'>
-            """, unsafe_allow_html=True)
-
             # Additional metrics
             annual_salary = prediction * 12
             hourly_rate = prediction / (40 * 4.33) 
@@ -200,7 +192,6 @@ if st.button("🔍 Predict Salary"):
             except Exception as e:
                 st.warning("⚠️ Could not load sample prediction data.")
                 st.text(f"Error: {e}")
-            st.markdown("</div>", unsafe_allow_html=True)
         except Exception as predict_error:
             st.error("Prediction failed.")
             st.text(f"Error: {predict_error}")
