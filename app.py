@@ -47,18 +47,22 @@ if st.button("Predict Salary 💰"):
     try:
         prediction = model.predict(input_df)[0]
         # Additional Metrices
-        st.success(f"✅ Estimated Salary: ₹ {prediction:,.2f}")
+        st.success(f"✅ Estimated Monthly Salary: {'₹'} {prediction:,.2f}")
+
+        # Additional metrics
+         annual_salary = prediction * 12
+        hourly_rate = prediction / (40 * 4.33) 
+        daily_earning = prediction / 30
+
         col1, col2, col3 = st.columns(3)
         with col1:
-            monthly_salary = prediction / 12
-            st.metric("Monthly Salary", f"{symbol} {monthly_salary:,.2f}")
-        with col2:
-            hourly_rate = prediction / (40 * 52)
-            st.metric("Hourly Rate", f"{symbol} {hourly_rate:.2f}")
-                    
-        with col3:
-            daily_rate = prediction / 365
-            st.metric("Daily Earning", f"{symbol} {daily_rate:.2f}")
+            st.metric("Annual Salary", f"{currency} {annual_salary:,.2f}")
+            with col2:
+                st.metric("Hourly Rate", f"{currency} {hourly_rate:,.2f}")
+                with col3:
+                    st.metric("Daily Earning", f"{currency} {daily_earning:,.2f}")
+    except Exception as e:
+        st.error(f"❌ Prediction failed: {e}")
     
         # Visualization
         fig = go.Figure(go.Indicator(
