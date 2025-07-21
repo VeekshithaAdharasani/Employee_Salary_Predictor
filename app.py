@@ -50,14 +50,14 @@ if st.button("Predict Salary 💰"):
         st.success(f"✅ Estimated Salary: ₹ {prediction:,.2f}")
         col1, col2, col3 = st.columns(3)
         with col1:
-            monthly_salary = converted_salary / 12
+            monthly_salary = prediction / 12
             st.metric("Monthly Salary", f"{symbol} {monthly_salary:,.2f}")
         with col2:
-            hourly_rate = converted_salary / (40 * 52)
+            hourly_rate = prediction / (40 * 52)
             st.metric("Hourly Rate", f"{symbol} {hourly_rate:.2f}")
                     
         with col3:
-            daily_rate = converted_salary / 365
+            daily_rate = prediction / 365
             st.metric("Daily Earning", f"{symbol} {daily_rate:.2f}")
     
         # Visualization
