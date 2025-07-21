@@ -60,19 +60,30 @@ _,mse, r2= joblib.load("best_salary_model.pkl")
 
 mse = float(mse)
 r2 = float(r2)
-# Sidebar: show model performance
-st.sidebar.header("📈 Model Performance")
-st.sidebar.metric("MSE (Mean Squared Error)", f"{mse:,.2f}")
-st.sidebar.metric("R² Score", f"{r2:.4f}")
+
+# Sidebar: animation + model info
+with st.sidebar:
+    st.image("https://media.giphy.com/media/3o7TKzH2YEUOAY0cyk/giphy.gif", use_container_width=True)
+    st.write("🧠 Powered by CatBoost ML Model")
+
+    st.markdown("---")
+    st.markdown("### 📈 Model Performance")
+    
+    st.markdown(
+        f"""
+        <div style="background-color: #f0f8ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd;">
+            <h4 style="color:#333;">📉 Mean Squared Error (MSE)</h4>
+            <p style="font-size: 22px; color: green; font-weight: bold; margin: 5px 0;">{mse:,.2f}</p>
+            <h4 style="color:#333;">🎯 R² Score</h4>
+            <p style="font-size: 22px; color: blue; font-weight: bold; margin: 5px 0;">{r2:.4f}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 # Page config
 st.set_page_config(page_title="Salary Predictor 💼", layout="centered")
 st.markdown("<h1 style='text-align: center; color: #3366cc;'>AI-Powered Salary Predictor</h1>", unsafe_allow_html=True)
 st.markdown("### 🚀 Predict your salary based on your profile")
-
-# Sidebar animation
-with st.sidebar:
-    st.image("https://media.giphy.com/media/3o7TKzH2YEUOAY0cyk/giphy.gif", use_container_width=True)
-    st.write("🧠 Powered by CatBoost ML Model")
 
 # Input fields
 education = st.selectbox("🎓 Education", ["High School", "Bachelor", "Master", "PhD", "Diploma"])
@@ -125,6 +136,13 @@ if st.button("🔍 Predict Salary"):
                 """,
                 unsafe_allow_html=True
             )
+            st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
+
+            # VISUALIZATION
+            st.markdown("""
+            <div style='border: 2px solid #4CAF50; padding: 20px; border-radius: 10px; background-color: #f8fff5;'>
+            """, unsafe_allow_html=True)
+
             # Additional metrics
             annual_salary = prediction * 12
             hourly_rate = prediction / (40 * 4.33) 
@@ -138,68 +156,61 @@ if st.button("🔍 Predict Salary"):
             with col3:
                 st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
                 
-            #Visualization
-            fig = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=prediction,
-                title={'text': "Estimated Salary (INR)"},            
-                gauge={
-                    'axis': {'range': [None, 5000000]},               
-                    'bar': {'color': "#4caf50"},
-                    'steps': [
-                        {'range': [0, 500000], 'color': "#f9f9f9"},                   
-                        {'range': [500000, 2000000], 'color': "#cde9d6"},
-                        {'range': [2000000, 5000000], 'color': "#a5d6a7"}
-                    ],
-                }
+
+            # Salary Bar Chart
+            fig = go.Figure(go.Bar(
+            x=["Predicted Monthly Salary"],
+            y=[prediction],
+            text=[f"₹ {prediction:,.2f}"],
+            textposition='auto',
+            marker_color='green'
             ))
-            st.plotly_chart(fig)
-        except Exception as e:
-            st.error(f"❌ Prediction failed: {e}")
-        try:
-            sample_df = pd.read_csv("sample_predictions.csv")
-            # Scatter plot: Actual vs Predicted
-            fig_scatter = px.scatter(
-                sample_df,
-                x="Actual Salary",
-                y="Predicted Salary (CatBoost)",
-                title="📈 Actual vs Predicted Salaries (CatBoost)",
-                labels={"Actual Salary": "Actual", "Predicted Salary (CatBoost)": "Predicted"},
-                trendline="ols"
+            fig.update_layout(
+                title="💰 Predicted Monthly Salary",
+                yaxis_title="Salary in INR",
+                height=400
             )
-            fig_scatter.update_layout(height=500)
-            st.plotly_chart(fig_scatter, use_container_width=True)
-        except Exception as e:
-            st.warning("⚠️ Could not display prediction graph.")
-            st.text(f"Error: {e}")
-#  Model Evaluation Summary
-st.markdown("## 📊 Model Evaluation Summary")
-try:
-    eval_df = pd.read_csv("model_evaluation.csv")
-    def highlight_best(s):
-        is_best = s["Model"] == "CatBoost"
-        return ['background-color: lightgreen' if b else '' for b in is_best]
-    st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
-except Exception as eval_error:
-            st.warning("⚠️ Could not load model evaluation data.")
-            st.text(f"Error: {eval_error}")
-st.markdown("## 🔍 Sample Predictions and Errors")
-try:
-    sample_df = pd.read_csv("sample_predictions.csv")
-    st.dataframe(sample_df.head(20), use_container_width=True)
-    avg_error = sample_df["Absolute Error"].mean()
-    st.info(f"📉 Average Absolute Error on test samples: ₹ {avg_error:,.2f}")
-    
-    fig_scatter = px.scatter(
-        sample_df,
-        x="Actual Salary",
-        y="Predicted Salary (CatBoost)",
-        title="📈 Actual vs Predicted Salaries (CatBoost)",
-        labels={"Actual Salary": "Actual", "Predicted Salary (CatBoost)": "Predicted"},
-        trendline="ols"
-    )
-    fig_scatter.update_layout(height=500)
-    st.plotly_chart(fig_scatter, use_container_width=True)
-except Exception as e:
-    st.warning("⚠️ Could not load sample prediction data.")
-    st.text(f"Error: {e}")
+            st.plotly_chart(fig, use_container_width=True)
+
+           # Scatter Plot: Actual vs Predicted
+           try:
+               sample_df = pd.read_csv("sample_predictions.csv")
+               fig_scatter = px.scatter(
+                   sample_df,
+                   x="Actual Salary",
+                   y="Predicted Salary (CatBoost)",
+                   title="📈 Actual vs Predicted Salaries (CatBoost)",
+                   labels={"Actual Salary": "Actual", "Predicted Salary (CatBoost)": "Predicted"},
+                   trendline="ols"
+               )
+               fig_scatter.update_layout(height=500)
+               st.plotly_chart(fig_scatter, use_container_width=True)
+           except Exception as e:
+               st.warning("⚠️ Could not display prediction graph.")
+               st.text(f"Error: {e}")
+           # Model Evaluation Summary
+           st.subheader("📊 Model Evaluation Summary")
+           try:
+               eval_df = pd.read_csv("model_evaluation.csv")
+               def highlight_best(row):
+                   return ['background-color: lightgreen'] * len(row) if row["Model"] == "CatBoost" else [''] * len(row)
+               st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
+           except Exception as eval_error:
+               st.warning("⚠️ Could not load model evaluation data.")
+               st.text(f"Error: {eval_error}")
+           # Sample Predictions and Errors
+           st.subheader("🔍 Sample Predictions and Errors")
+           try:
+               sample_df = pd.read_csv("sample_predictions.csv")
+               if "Absolute Error" not in sample_df.columns:
+                   sample_df["Absolute Error"] = abs(sample_df["Actual Salary"] - sample_df["Predicted Salary (CatBoost)"])
+                   st.dataframe(sample_df.head(20), use_container_width=True)
+                   avg_error = sample_df["Absolute Error"].mean()
+                   st.info(f"📉 Average Absolute Error: ₹ {avg_error:,.2f}")
+           except Exception as e:
+               st.warning("⚠️ Could not load sample prediction data.")
+               st.text(f"Error: {e}")
+           st.markdown("</div>", unsafe_allow_html=True)
+        except Exception as predict_error:
+            st.error("Prediction failed.")
+            st.text(f"Error: {predict_error}")
