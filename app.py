@@ -52,9 +52,9 @@ st.markdown(
 
 
 # Load trained pipeline
-pipeline_model = joblib.load("salary_prediction_pipeline.pkl")
+model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
-model, mse, r2= joblib.load("best_salary_model.pkl") 
+mse, r2= joblib.load("best_salary_model.pkl") 
 
 mse = float(mse)
 r2 = float(r2)
@@ -170,15 +170,15 @@ if st.button("🔍 Predict Salary"):
         except Exception as e:
             st.warning("⚠️ Could not display prediction graph.")
             st.text(f"Error: {e}")
-        #  Model Evaluation Summary
-        st.markdown("## 📊 Model Evaluation Summary")
-        try:
-            eval_df = pd.read_csv("model_evaluation.csv")
-            def highlight_best(s):
-                is_best = s["Model"] == "CatBoost"
-                return ['background-color: lightgreen' if b else '' for b in is_best]
-            st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
-        except Exception as eval_error:
+#  Model Evaluation Summary
+st.markdown("## 📊 Model Evaluation Summary")
+try:
+    eval_df = pd.read_csv("model_evaluation.csv")
+    def highlight_best(s):
+        is_best = s["Model"] == "CatBoost"
+        return ['background-color: lightgreen' if b else '' for b in is_best]
+    st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
+except Exception as eval_error:
             st.warning("⚠️ Could not load model evaluation data.")
             st.text(f"Error: {eval_error}")
 st.markdown("## 🔍 Sample Predictions and Errors")
