@@ -147,8 +147,6 @@ if st.button("🔍 Predict Salary"):
         except Exception as e:
             st.warning("⚠️ Could not display prediction graph.")
             st.text(f"Error: {e}")
-        except Exception as e:
-            st.error(f"❌ Prediction failed: {e}")
 #  Model Evaluation Summary
 st.markdown("## 📊 Model Evaluation Summary")
 try:
