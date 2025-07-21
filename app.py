@@ -127,12 +127,13 @@ if st.button("🔍 Predict Salary"):
             )
             # Section Header Box
             st.markdown("""
-            <div style="background-color: #e7f5ff; padding: 20px; border-radius: 10px; border: 2px solid #007acc;">
-            <h3 style="color: #007acc;">📊 Salary Forecast Summary</h3>
+            <div style="text-align: center;">
+            <div style="display: inline-block; background-color: #e7f5ff; padding: 20px; border-radius: 10px; border: 2px solid #007acc; max-width: 600px;">
+            <h3 style="color: #007acc; margin: 0;">📊 Salary Forecast Summary</h3>
+            </div>
             </div>
             """, unsafe_allow_html=True)
-            # Spacer
-            st.markdown("<br>", unsafe_allow_html=True)
+
             # Metrics Section Box
             st.markdown("""
             <div style="background-color: #f8fff5; padding: 20px; border-radius: 10px; border: 2px solid #4CAF50;">
