@@ -7,7 +7,13 @@ from PIL import Image
 import plotly.express as px
 
 import sklearn.compose._column_transformer
-setattr(sklearn.compose._column_transformer, '_RemainderColsList', list)
+
+# Define a dummy class to satisfy joblib unpickling
+class _RemainderColsList(list):
+    pass
+
+# Inject it into sklearn where joblib is looking for it
+sklearn.compose._column_transformer._RemainderColsList = _RemainderColsList
 
 st.markdown(
     """
