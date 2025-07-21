@@ -125,19 +125,7 @@ if st.button("🔍 Predict Salary"):
                 """,
                 unsafe_allow_html=True
             )
-            # Section Header Box
-            st.markdown("""
-            <div style="text-align: center;">
-            <div style="display: inline-block; background-color: #e7f5ff; padding: 20px; border-radius: 10px; border: 2px solid #007acc; max-width: 600px;">
-            <h3 style="color: #007acc; margin: 0;">📊 Salary Forecast Summary</h3>
-            </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # Metrics Section Box
-            st.markdown("""
-            <div style="background-color: #f8fff5; padding: 20px; border-radius: 10px; border: 2px solid #4CAF50;">
-            """, unsafe_allow_html=True)
+            st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
             # Metrics Displayed in Columns
             col1, col2, col3 = st.columns(3)
             annual_salary = prediction * 12
