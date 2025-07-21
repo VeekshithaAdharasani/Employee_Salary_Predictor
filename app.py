@@ -61,9 +61,8 @@ _,mse, r2= joblib.load("best_salary_model.pkl")
 mse = float(mse)
 r2 = float(r2)
 
-# Sidebar: animation + model info
+# Sidebar: model info
 with st.sidebar:
-    st.image("https://media.giphy.com/media/3o7TKzH2YEUOAY0cyk/giphy.gif", use_container_width=True)
     st.write("🧠 Powered by CatBoost ML Model")
 
     st.markdown("---")
