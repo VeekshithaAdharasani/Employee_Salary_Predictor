@@ -56,6 +56,7 @@ model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
 model, mse= joblib.load("best_salary_model.pkl") 
 
+mse = float(mse)
 # Sidebar: show model performance
 st.sidebar.header("📈 Model Performance")
 st.sidebar.metric("MSE (Mean Squared Error)", f"{float(mse):,.2f}")
