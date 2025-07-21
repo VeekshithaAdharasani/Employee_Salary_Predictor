@@ -6,6 +6,8 @@ import plotly.graph_objects as go
 from PIL import Image
 import plotly.express as px
 
+import sklearn.compose._column_transformer
+setattr(sklearn.compose._column_transformer, '_RemainderColsList', list)
 
 st.markdown(
     """
@@ -51,8 +53,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
 # Load trained pipeline
 pipeline = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
