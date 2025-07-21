@@ -122,21 +122,21 @@ if st.button("🔍 Predict Salary"):
                 """,
                 unsafe_allow_html=True
             )
+            # Additional metrics
+            annual_salary = prediction * 12
+            hourly_rate = prediction / (40 * 4.33) 
+            daily_earning = prediction / 30
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Annual Salary", f"{'₹'} {annual_salary:,.2f}")
+            with col2:
+                st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
+            with col3:
+                st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
         except Exception as e:
             st.error(f"❌ Prediction failed: {e}")
         
-        # Additional metrics
-        annual_salary = prediction * 12
-        hourly_rate = prediction / (40 * 4.33) 
-        daily_earning = prediction / 30
-        col1, col2, col3 = st.columns(3)
-            
-        with col1:
-            st.metric("Annual Salary", f"{'₹'} {annual_salary:,.2f}")
-        with col2:
-            st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
-        with col3:
-            st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
         #Visualization
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
