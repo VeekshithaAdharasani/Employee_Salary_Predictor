@@ -126,6 +126,7 @@ if st.button("🔍 Predict Salary"):
                 unsafe_allow_html=True
             )
             st.markdown("### 📊 Salary Forecast Summary", unsafe_allow_html=True)
+            
             # Metrics Displayed in Columns
             col1, col2, col3 = st.columns(3)
             annual_salary = prediction * 12
@@ -137,12 +138,6 @@ if st.button("🔍 Predict Salary"):
                 st.metric("Hourly Rate", f"₹ {hourly_rate:,.2f}")
             with col3:
                 st.metric("Daily Earning", f"₹ {daily_earning:,.2f}")
-
-            # Close box
-            st.markdown("</div>", unsafe_allow_html=True)
-
-            # Spacer
-            st.markdown("<br>", unsafe_allow_html=True)
 
             # Salary Bar Chart
             fig = go.Figure(go.Bar(
