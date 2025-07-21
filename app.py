@@ -33,8 +33,14 @@ gender= st.selectbox("👤 Gender", ["Male", "Female"])
 job_title = st.selectbox("💻 Job_Title", ["Manager", "Director", "Analyst", "Engineer", "Accountant", "Other"])
 experience = st.slider("💼 Experience (Years)", 0, 40, 2)
 
-# Predict button
-if st.button("Predict Salary 💰"):
+if education == "PhD" and experience < 3:
+    st.warning("⚠️ PhD holders typically have at least 3 years of experience.")
+elif education == "Master" and experience < 1:
+    st.warning("⚠️ Master graduates usually have at least 1 year of experience.")
+elif education == "High School" and experience > (age - 16):
+    st.warning("⚠️ High School grads cannot have that much experience at this age.")
+else:
+    st.button("Predict Salary 💰"):
     input_df = pd.DataFrame({
         "Education": [education],
         "Age": [age],
@@ -43,7 +49,11 @@ if st.button("Predict Salary 💰"):
         "Job_Title": [job_title],
         "Experience": [experience],
     })
-
+if input_df["Experience"].values[0] > input_df["Age"].values[0]:
+    st.error("❌ Experience cannot be greater than Age. Please correct the input.")
+elif not (education and age and location and gender and job_title and experience is not None):
+    st.warning("⚠️ Please fill in all the input fields before proceeding.")
+else:
     try:
         prediction = model.predict(input_df)[0]
         # Predict salary
