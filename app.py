@@ -52,7 +52,7 @@ st.markdown(
 
 
 # Load trained pipeline
-model = joblib.load("salary_prediction_pipeline.pkl")
+pipeline_model = joblib.load("salary_prediction_pipeline.pkl")
 # Load the best model and its performance metrics
 model, mse, r2= joblib.load("best_salary_model.pkl") 
 
@@ -107,6 +107,7 @@ if st.button("🔍 Predict Salary"):
                 "Job_Title": [job_title],
                 "Experience": [experience],
             })
+            
             # Predict salary
             prediction = model.predict(input_df)[0]
             MIN_SALARY = 33510.51
@@ -134,25 +135,25 @@ if st.button("🔍 Predict Salary"):
                 st.metric("Hourly Rate", f"{'₹'} {hourly_rate:,.2f}")
             with col3:
                 st.metric("Daily Earning", f"{'₹'} {daily_earning:,.2f}")
+                
+            #Visualization
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=prediction,
+                title={'text': "Estimated Salary (INR)"},            
+                gauge={
+                    'axis': {'range': [None, 5000000]},               
+                    'bar': {'color': "#4caf50"},
+                    'steps': [
+                        {'range': [0, 500000], 'color': "#f9f9f9"},                   
+                        {'range': [500000, 2000000], 'color': "#cde9d6"},
+                        {'range': [2000000, 5000000], 'color': "#a5d6a7"}
+                    ],
+                }
+            ))
+            st.plotly_chart(fig)
         except Exception as e:
             st.error(f"❌ Prediction failed: {e}")
-        
-        #Visualization
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=prediction,
-            title={'text': "Estimated Salary (INR)"},
-            gauge={
-                'axis': {'range': [None, 5000000]},
-                'bar': {'color': "#4caf50"},
-                'steps': [
-                    {'range': [0, 500000], 'color': "#f9f9f9"},
-                    {'range': [500000, 2000000], 'color': "#cde9d6"},
-                    {'range': [2000000, 5000000], 'color': "#a5d6a7"}
-                ],
-            }
-        ))
-        st.plotly_chart(fig)
         try:
             sample_df = pd.read_csv("sample_predictions.csv")
             # Scatter plot: Actual vs Predicted
@@ -169,15 +170,15 @@ if st.button("🔍 Predict Salary"):
         except Exception as e:
             st.warning("⚠️ Could not display prediction graph.")
             st.text(f"Error: {e}")
-#  Model Evaluation Summary
-st.markdown("## 📊 Model Evaluation Summary")
-try:
-    eval_df = pd.read_csv("model_evaluation.csv")
-    def highlight_best(s):
-        is_best = s["Model"] == "CatBoost"
-        return ['background-color: lightgreen' if b else '' for b in is_best]
-        st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
-except Exception as eval_error:
+        #  Model Evaluation Summary
+        st.markdown("## 📊 Model Evaluation Summary")
+        try:
+            eval_df = pd.read_csv("model_evaluation.csv")
+            def highlight_best(s):
+                is_best = s["Model"] == "CatBoost"
+                return ['background-color: lightgreen' if b else '' for b in is_best]
+            st.dataframe(eval_df.style.apply(highlight_best, axis=1), use_container_width=True)
+        except Exception as eval_error:
             st.warning("⚠️ Could not load model evaluation data.")
             st.text(f"Error: {eval_error}")
 st.markdown("## 🔍 Sample Predictions and Errors")
