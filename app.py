@@ -4,6 +4,8 @@ import numpy as np
 import joblib
 import plotly.graph_objects as go
 from PIL import Image
+import plotly.express as px
+
 
 st.markdown(
     """
@@ -109,7 +111,7 @@ if st.button("🔍 Predict Salary"):
             })
             
             # Predict salary
-            prediction = model.predict(input_df)[0]
+            prediction = pipeline.predict(input_df)[0]
             MIN_SALARY = 33510.51
             MAX_SALARY = 193016.60
             prediction = max(MIN_SALARY, min(MAX_SALARY, prediction))
