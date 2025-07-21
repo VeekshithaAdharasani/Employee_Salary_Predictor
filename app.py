@@ -157,7 +157,7 @@ if st.button("🔍 Predict Salary"):
             st.plotly_chart(fig, use_container_width=True)
 
             st.markdown("""
-            <hr style="border-top: 10px dashed #aaa; margin: 10px 0;" />
+            <hr style="border-top: 1px dashed #aaa; margin: 5px 0;" />
             """, unsafe_allow_html=True)
             
             # Scatter Plot: Actual vs Predicted
