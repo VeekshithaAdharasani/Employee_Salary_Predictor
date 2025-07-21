@@ -36,7 +36,7 @@ experience = st.slider("💼 Experience (Years)", 0, 40, 2)
 # Predict button
 if st.button("Predict Salary 💰"):
     input_df = pd.DataFrame({
-        "Eduaction": [education],
+        "Education": [education],
         "Age": [age],
         "Location": [location],
         "Gender": [gender],
