@@ -5,6 +5,13 @@ import joblib
 import plotly.graph_objects as go
 from PIL import Image
 
+# Page configuration
+st.set_page_config(
+    page_title="💼 Salary Prediction App",
+    page_icon="💰",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 # Load trained pipeline
 model = joblib.load("salary_prediction_pipeline.pkl")
 
@@ -15,32 +22,44 @@ st.markdown("### 🚀 Predict your salary based on your profile")
 
 # Sidebar animation
 with st.sidebar:
-    st.image("https://media.giphy.com/media/3o7TKzH2YEUOAY0cyk/giphy.gif", use_column_width=True)
+    st.image("https://media.giphy.com/media/3o7TKzH2YEUOAY0cyk/giphy.gif", use_container_width=True)
     st.write("🧠 Powered by CatBoost ML Model")
 
 # Input fields
-education = st.selectbox("🎓 Qualification", ["High School", "Bachelor", "Master", "PhD", "Diploma"])
-experience = st.slider("💼 Work Experience (Years)", 0, 40, 2)
-age = st.slider("📅 Age", 18, 65, 25)
+education = st.selectbox("🎓 Education", ["High School", "Bachelor", "Master", "PhD", "Diploma"])
+age = st.selectbox("📅 Age", 18, 65, 25)
 location = st.selectbox("📍 Location", ["Urban", "Rural", "Suburban"])
-gender = st.radio("👤 Gender", ["Male", "Female"])
-job_title = st.selectbox("💻 Job Title", ["Manager", "Director", "Analyst", "Engineer", "Accountant", "Other"])
+gender= st.selectbox("👤 Gender", ["Male", "Female"])
+job_title = st.selectbox("💻 Job_Title", ["Manager", "Director", "Analyst", "Engineer", "Accountant", "Other"])
+experience = st.slider("💼 Experience (Years)", 0, 40, 2)
 
 # Predict button
 if st.button("Predict Salary 💰"):
     input_df = pd.DataFrame({
         "Eduaction": [education],
-        "Experience": [experience],
         "Age": [age],
         "Location": [location],
         "Gender": [gender],
         "Job_Title": [job_title]
+        "Experience": [experience],
     })
 
     try:
         prediction = model.predict(input_df)[0]
+        # Additional Metrices
         st.success(f"✅ Estimated Salary: ₹ {prediction:,.2f}")
-
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            monthly_salary = converted_salary / 12
+            st.metric("Monthly Salary", f"{symbol} {monthly_salary:,.2f}")
+        with col2:
+            hourly_rate = converted_salary / (40 * 52)
+            st.metric("Hourly Rate", f"{symbol} {hourly_rate:.2f}")
+                    
+        with col3:
+            daily_rate = converted_salary / 365
+            st.metric("Daily Earning", f"{symbol} {daily_rate:.2f}")
+    
         # Visualization
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
